@@ -12,42 +12,32 @@
     <link rel="icon" href="/logo.png" type="image/x-icon" />
 
     {{-- Judul --}}
-    <title>Laravel Todolist</title>
+    <title>Catatan Keuangan</title>
 
     {{-- Styles --}}
     @livewireStyles
     <link rel="stylesheet" href="/assets/vendor/bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    {{-- Tambahkan Font Awesome untuk Ikon --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body class="bg-light">
-    <div class="container-fluid">
-        @yield('content')
+    {{-- Container ini digunakan untuk halaman Login dan Register --}}
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="card shadow-lg w-100" style="max-width: 450px;">
+            <div class="card-body p-4">
+                @yield('content')
+            </div>
+        </div>
     </div>
 
     {{-- Scripts --}}
     <script src="/assets/vendor/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener("livewire:initialized", () => {
-            Livewire.on("closeModal", (data) => {
-                const modal = bootstrap.Modal.getInstance(
-                    document.getElementById(data.id)
-                );
-                if (modal) {
-                    modal.hide();
-                }
-            });
-
-            Livewire.on("showModal", (data) => {
-                const modal = bootstrap.Modal.getOrCreateInstance(
-                    document.getElementById(data.id)
-                );
-                if (modal) {
-                    modal.show();
-                }
-            });
-        });
-    </script>
+    
+    {{-- Livewire Scripts di akhir body --}}
     @livewireScripts
+
+    {{-- Note: Livewire modal listeners telah dihapus karena akan dikelola di Livewire Component --}}
 </body>
 
 </html>

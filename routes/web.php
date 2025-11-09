@@ -1,20 +1,27 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\AuthLoginLivewire;
+use App\Livewire\AuthRegisterLivewire;
+use App\Http\Controllers\AuthController;
+use App\Livewire\FinanceIndexLivewire; // Import komponen baru
 
-Route::group(['prefix' => 'auth'], function () {
-    Route::get('/login', [AuthController::class, 'login'])->name('auth.login');
-    Route::get('/register', [AuthController::class, 'register'])->name('auth.register');
-    Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+// --- Rute Autentikasi ---
+Route::middleware(['guest'])->group(function () {
+    Route::get('/login', AuthLoginLivewire::class)->name('auth.login');
+    Route::get('/register', AuthRegisterLivewire::class)->name('auth.register');
 });
 
-Route::group(['prefix' => 'app', 'middleware' => 'check.auth'], function () {
-    Route::get('/home', [HomeController::class, 'index'])->name('app.home');
-    Route::get('/todos/{todo_id}', [HomeController::class, 'todoDetail'])->name('app.todos.detail');
+// --- Rute Aplikasi (Membutuhkan Login) ---
+Route::middleware(['auth'])->group(function () {
+    // Ubah rute utama dari HomeLivewire ke FinanceIndexLivewire
+    Route::get('/', FinanceIndexLivewire::class)->name('finance.index');
+    
+    // Hapus rute Todo yang lama
+    // Route::get('/todo/{todo}', TodoDetailLivewire::class)->name('todo.detail');
+
+    Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 });
 
-Route::get('/', function () {
-    return redirect()->route('app.home');
-});
+// Redirect default ke halaman login
+Route::redirect('/auth/login', '/login');
